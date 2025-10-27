@@ -14,10 +14,17 @@ class ContatoViewController: UIViewController {
     @IBOutlet weak var txtTelefone: UITextField!
     @IBOutlet weak var txtEmail: UITextField!
     
+    var informacaoContato:NSManagedObject? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        if (informacaoContato != nil) {
+            txtNome.text = informacaoContato?.value(forKey: "nome") as? String
+            txtTelefone.text = informacaoContato?.value(forKey: "telefone") as? String
+            txtEmail.text = informacaoContato?.value(forKey: "email") as? String
+        }
+        
     }
     
     @IBAction func salvar(_ sender: Any) {
@@ -35,11 +42,20 @@ class ContatoViewController: UIViewController {
         let entidade = NSEntityDescription.entity(forEntityName: "Paciente", in: managedContext)!
         
         // realizando o processo de inserção dos dados - INSERT
-        let pessoa = NSManagedObject(entity: entidade, insertInto: managedContext)
         
-        pessoa.setValue(nome, forKey: "nome")
-        pessoa.setValue(telefone, forKey: "telefone")
-        pessoa.setValue(email, forKey: "email")
+        if (informacaoContato == nil) {
+            let pessoa = NSManagedObject(entity: entidade, insertInto: managedContext)
+            
+            pessoa.setValue(nome, forKey: "nome")
+            pessoa.setValue(telefone, forKey: "telefone")
+            pessoa.setValue(email, forKey: "email")
+        } else {
+            let pessoaUpdate = informacaoContato
+            
+            pessoaUpdate!.setValue(nome, forKey: "nome")
+            pessoaUpdate!.setValue(telefone, forKey: "telefone")
+            pessoaUpdate!.setValue(email, forKey: "email")
+        }
         
         do {
             try managedContext.save()
