@@ -36,7 +36,6 @@ class ContatoTableViewController: UITableViewController {
     }
     
     // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
@@ -68,17 +67,27 @@ class ContatoTableViewController: UITableViewController {
     }
     */
 
-    /*
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            
+            let managedContext = appDelegate.persistentContainer.viewContext
+            managedContext.delete(pessoas[indexPath.row])
+            
+            do {
+                try managedContext.save()
+                pessoas.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            } catch let error as NSError {
+                print("Não foi possível salvar. \(error), \(error.userInfo)")
+            }
+            
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
 
     /*
     // Override to support rearranging the table view.

@@ -28,7 +28,7 @@ class ContatoViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    func saveData(nome:String, telefone:String, email:String) {
+    func saveData(nome: String, telefone: String, email: String) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let managedContext = appDelegate.persistentContainer.viewContext
